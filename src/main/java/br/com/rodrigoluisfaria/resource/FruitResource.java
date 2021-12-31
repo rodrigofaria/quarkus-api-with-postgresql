@@ -33,8 +33,11 @@ public class FruitResource {
         Fruit fruit2 = new Fruit();
         fruit2.setName("TesteDeFruta");
         //fruit2.persistAndFlush();
-        Panache.<Fruit>withTransaction(fruit2::persist);
-
+        //Panache.<Fruit>withTransaction(fruit2::persist);
+        Panache.<Fruit>withTransaction(fruit2::persist).onItem()
+                .transform(inserted -> Response.created(URI.create("/fruits/" + inserted.id))
+                        .build())
+                .subscribe();
 
         Fruit fruit = new Fruit();
         fruit.setName("Melancia");
